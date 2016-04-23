@@ -1,1 +1,2 @@
-alert("it is working");
+var test = require("./test/test");
+alert(test.x);

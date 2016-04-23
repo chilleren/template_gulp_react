@@ -3,7 +3,8 @@ var path = require("path");
 var sass = require("gulp-sass");
 var connect = require("gulp-connect");
 var livereload = require("gulp-livereload");
-var babel = require("gulp-babel");
+var browserify = require("gulp-browserify");
+var reactify = require("reactify");
 
 var sassPath = "./src/stylesheets/";
 var htmlPath = "./src/index.html";
@@ -29,10 +30,14 @@ gulp.task("connect", function () {
   });
 });
 
+
 gulp.task("js", function () {
-  return gulp.src(path.join(jsPath, "app.js"))
-    .pipe(babel())
-    .pipe(gulp.dest("./dist/scripts"))
+  gulp.src(path.join(jsPath, "app.js"))
+    .pipe(browserify({
+      debug: true,
+      transform: [reactify]
+    }))
+    .pipe(gulp.dest("./dist/scripts"));
 });
 
 gulp.task("watch", function () {

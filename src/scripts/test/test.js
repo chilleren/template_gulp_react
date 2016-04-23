@@ -1,0 +1,1 @@
+module.exports.x = "import successful again";

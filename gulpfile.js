@@ -3,9 +3,11 @@ var path = require("path");
 var sass = require("gulp-sass");
 var connect = require("gulp-connect");
 var livereload = require("gulp-livereload");
+var babel = require("gulp-babel");
 
 var sassPath = "./src/stylesheets/";
 var htmlPath = "./src/index.html";
+var jsPath = "./src/scripts";
 
 gulp.task("html", function () {
   gulp.src(htmlPath)
@@ -15,9 +17,7 @@ gulp.task("html", function () {
 
 gulp.task("sass", function () {
   return gulp.src(path.join(sassPath, "style.scss"))
-    .pipe(sass({
-      //includePaths: ["styles"].concat(neat)
-    }))
+    .pipe(sass())
     .pipe(gulp.dest("./dist/css"))
     .pipe(livereload());
 });
@@ -29,10 +29,17 @@ gulp.task("connect", function () {
   });
 });
 
+gulp.task("js", function () {
+  return gulp.src(path.join(jsPath, "app.js"))
+    .pipe(babel())
+    .pipe(gulp.dest("./dist/scripts"))
+});
+
 gulp.task("watch", function () {
   livereload.listen();
   gulp.watch(path.join(sassPath, "**/*"), ["sass"]);
   gulp.watch(htmlPath, ["html"]);
+  gulp.watch(path.join(jsPath, "**/*"), ["js"]);
 });
 
-gulp.task("default", ["html", "sass", "connect", "watch"]);
+gulp.task("default", ["html", "sass", "js", "connect", "watch"]);
